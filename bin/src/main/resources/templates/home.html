@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/header :: header('Home')}">
+</head>
+
+<body>
+
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container mt-5">
+        <div class="row g-4">
+            <!-- Quartets -->
+            <div class="col-md-6">
+                <div class="border border-2 border-info rounded-4 p-4 h-100">
+                    <h4>Quartets</h4>
+
+                    <p>
+                        Create/Modify unique quartets combining Compound, Study,
+                        Department, Partner
+                    </p>
+
+                    <a th:href="@{/newQuartet}" class="btn btn-outline-success btn-sm"> Create </a>
+
+                    <a class="btn btn-outline-primary btn-sm"> Find </a>
+                    <a th:href="@{/listQuartets}" class="btn btn-outline-primary btn-sm"> List Quartets </a>
+
+                    <a th:href="@{/studyOwner}" class="btn btn-outline-primary btn-sm"> Study Owner </a>
+                </div>
+            </div>
+
+            <!-- Exchange -->
+            <div class="col-md-6">
+                <div class="border border-2 border-info rounded-4 p-4 h-100">
+                    <h4>Exchange</h4>
+
+                    <p>
+                        Generate and manage exchanges to enable file transfers and
+                        notification subscribers
+                    </p>
+
+                    <a th:href="@{/newExchange}" class="btn btn-outline-success btn-sm"> Setup </a>
+
+                    <a th:href="@{/manageExchange}" class="btn btn-outline-primary btn-sm"> Manage </a>
+                    <a th:href="@{/listExchanges}" class="btn btn-outline-primary btn-sm"> List Exchanges </a>
+                </div>
+            </div>
+
+            <!-- Users -->
+            <div class="col-md-6">
+                <div class="border border-2 border-info rounded-4 p-4 h-100">
+                    <h4>Users</h4>
+
+                    <p>
+                        Add/Update details of internal and external users - Email,
+                        Credentials
+                    </p>
+
+                    <a th:href="@{/newUser}" class="btn btn-outline-success btn-sm"> Add </a>
+
+                    <a th:href="@{/manageUser}" class="btn btn-outline-primary btn-sm"> Update </a>
+                    <a th:href="@{/listUsers}" class="btn btn-outline-primary btn-sm"> List Users </a>
+                </div>
+            </div>
+
+            <!-- Utilities -->
+            <div class="col-md-6">
+                <div class="border border-2 border-info rounded-4 p-4 h-100">
+                    <h4>Utilities</h4>
+
+                    <p>Utilities for reports</p>
+
+                    <a href="#" class="btn btn-outline-primary btn-sm"> Audit Logs </a>
+
+                    <a href="#" class="btn btn-outline-success btn-sm"> New Event </a>
+
+                    <a href="#" class="btn btn-outline-primary btn-sm"> Reports </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:replace="~{fragments/script :: script}"></th:block>
+
+</body>
+</html>

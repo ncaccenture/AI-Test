@@ -1,0 +1,52 @@
+.navbar .custom-nav-link {
+    color: darkgray;
+}
+
+.navbar .custom-nav-link:hover,
+.navbar .custom-nav-link.show {
+    color: #ffffff;
+}
+
+.first-name-field {
+    background-color: #E9ECEF;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #CED4DA;
+}
+
+.left-radius {
+    border-radius: 4px 0 0 4px;
+}
+
+.last-name-field {
+    background-color: #E9ECEF;
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #CED4DA;
+}
+
+.light-bg-grey{
+    background-color: #E9ECEF;
+    border: 1px solid #CED4DA;
+}
+
+.password-reset-button{
+    border-radius: 0;
+    border-right: none;
+}
+.resend-user-guide-button{
+    border-radius: 0 4px 4px 0;
+}
+
+.custom-input-field {
+    border-radius: 0 4px 4px 0;
+    border: 1px solid #ced4da;
+}
+
+.dis-btn {
+    border-radius: 4px 0 0 4px;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+}
+
+.add-btn {
+    border-radius: 0 4px 4px 0;
+}

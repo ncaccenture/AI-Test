@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('New User')}">
+</head>
+
+<body>
+
+<!-- Reusable Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
+<div class="container px-4 mt-4">
+
+    <!-- Heading -->
+    <h1 class="mb-3">Add New User</h1>
+
+    <hr>
+
+
+    <form id="userForm">
+
+        <!-- User Details -->
+        <div class="row g-4">
+
+            <!-- First Name -->
+            <div class="col-md-3">
+                <label for="firstName" class="form-label">
+                    First Name
+                </label>
+
+                <input type="text"
+                       id="firstName"
+                       name="firstName"
+                       class="form-control">
+            </div>
+
+
+            <!-- Last Name -->
+            <div class="col-md-3">
+                <label for="lastName" class="form-label">
+                    Last Name
+                </label>
+
+                <input type="text"
+                       id="lastName"
+                       name="lastName"
+                       class="form-control">
+            </div>
+
+
+            <!-- Email -->
+            <div class="col-md-3">
+                <label for="email" class="form-label">
+                    Email Address
+                </label>
+
+                <input type="email"
+                       id="email"
+                       name="email"
+                       class="form-control">
+            </div>
+
+
+            <!-- Phone -->
+            <div class="col-md-3">
+                <label for="phone" class="form-label">
+                    Phone Number
+                </label>
+
+                <input type="tel"
+                       id="phone"
+                       name="phone"
+                       class="form-control">
+            </div>
+
+        </div>
+
+
+        <!-- Checkboxes -->
+        <div class="row mt-4">
+
+            <div class="col-md-3">
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           id="eisaiUser"
+                           name="eisaiUser"
+                           checked>
+
+                    <label class="form-check-label" for="eisaiUser">
+                        Eisai User
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           id="sftpUser"
+                           name="sftpUser">
+
+                    <label class="form-check-label" for="sftpUser">
+                        SFTP User
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="form-check">
+                    <input class="form-check-input"
+                           type="checkbox"
+                           id="sendCredentials"
+                           name="sendCredentials">
+
+                    <label class="form-check-label" for="sendCredentials">
+                        Send Credentials
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Separator -->
+        <hr class="mt-4">
+
+
+        <!-- Actions -->
+        <div class="d-flex align-items-center gap-2">
+
+            <button type="submit"
+                    class="btn btn-success">
+                + ADD USER
+            </button>
+
+            <a href="/setup-exchanges"
+               class="text-primary text-decoration-none">
+                Next: Setup exchanges
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+<div class="modal fade"
+     id="responseModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="d-flex align-items-center justify-items-between">
+                <div class="modal-body" id="responseModalBody">
+                </div>
+                <div>
+                    <button type="button"
+                            class="btn-close me-3"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+
+<script>
+
+    const eisaiUser = document.getElementById("eisaiUser");
+    const sftpUser = document.getElementById("sftpUser");
+    const sendCredentials = document.getElementById("sendCredentials");
+
+    // When SFTP User is checked/unchecked
+    sftpUser.addEventListener("change", function () {
+
+        if (sftpUser.checked) {
+            sendCredentials.checked = true;
+            eisaiUser.checked = false;
+        } else {
+            eisaiUser.checked = true;
+            sendCredentials.checked = false;
+        }
+
+    });
+    eisaiUser.addEventListener("change", function () {
+
+        if (eisaiUser.checked) {
+            sendCredentials.checked = false;
+            sftpUser.checked = false;
+        } else {
+            sftpUser.checked = true;
+            sendCredentials.checked = true;
+        }
+
+    });
+
+
+    // Submit user data
+    document.getElementById("userForm").addEventListener("submit", async function (event) {
+
+        event.preventDefault();
+
+        const userData = {
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            eisaiUser: eisaiUser.checked,
+            sftpUser: sftpUser.checked,
+            sendCredentials: sendCredentials.checked
+        };
+
+        console.log("User data:", userData);
+
+        try {
+
+            const response = await fetch("/api/user/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userData)
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to create user");
+            }
+
+            const result = await response.json();
+
+            document.getElementById("responseModalBody").textContent =
+                result.message;
+
+            const modal = new bootstrap.Modal(
+                document.getElementById("responseModal")
+            );
+
+            modal.show();
+
+        } catch (error) {
+
+            console.error("Error:", error);
+
+            document.getElementById("responseModalBody").textContent =
+                "Something went wrong!";
+
+            const modal = new bootstrap.Modal(
+                document.getElementById("responseModal")
+            );
+
+            modal.show();
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

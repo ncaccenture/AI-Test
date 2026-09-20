@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('Quartet')}">
+    <script src="../static/js/manageExchange.js"></script>
+</head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+    <h1 class="mb-3">Manage Exchange</h1>
+
+    <hr/>
+
+    <form id="exchangeForm" class="mb-4">
+        <!-- First Row -->
+        <h3>Search Exchange</h3>
+
+        <div class="row mb-4">
+            <h4>Source Quartet</h4>
+            <div class="col-md-2">
+                <label for="sourceCompound" class="form-label"> Compound </label>
+
+                <input type="text" id="sourceCompound" class="form-control"/>
+            </div>
+
+            <!-- Study -->
+            <div class="col-md-2">
+                <label for="sourceStudy" class="form-label"> Study </label>
+
+                <input type="text" id="sourceStudy" class="form-control"/>
+            </div>
+
+            <!-- Department -->
+            <div class="col-md-2">
+                <label for="sourceDepartment" class="form-label"> Department </label>
+
+                <select id="sourceDepartment" class="form-select form-control">
+                    <option selected></option>
+                    <option value="dataops">Dataops</option>
+                    <option value="biostats">Biostats</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="sourcePartner" class="form-label"> Partner </label>
+
+                <input type="text" id="sourcePartner" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+                <label for="sourceEndpoint" class="form-label"> Endpoint </label>
+                <select
+                        id="sourceEndpoint"
+                        name="sourceEndpoint"
+                        class="form-select"
+                >
+                    <option selected></option>
+                    <option value="oracle">ORACLE</option>
+                    <option value="mina">MINA</option>
+                    <option value="ecce">ECCE</option>
+                    <option value="internal">INTERNAL</option>
+                    <option value="email">EMAIL</option>
+                    <option value="rave">RAVE</option>
+                    <option value="cds">CDS</option>
+                    <option value="eccepp">ECCEPP</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <h4>Destination Quartet</h4>
+            <!-- Compound -->
+            <div class="col-md-2">
+                <label for="destinationCompound" class="form-label"> Compound </label>
+
+                <input type="text" id="destinationCompound" class="form-control" disabled/>
+            </div>
+
+            <!-- Study -->
+            <div class="col-md-2">
+                <label for="destinationStudy" class="form-label"> Study </label>
+
+                <input type="text" id="destinationStudy" class="form-control" disabled/>
+            </div>
+
+            <!-- Department -->
+            <div class="col-md-2">
+                <label for="destinationDepartment" class="form-label"> Department </label>
+
+                <select id="destinationDepartment" class="form-select form-control" disabled>
+                    <option selected></option>
+                    <option value="dataops">Dataops</option>
+                    <option value="biostats">Biostats</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label for="destinationPartner" class="form-label"> Partner </label>
+
+                <input type="text" id="destinationPartner" class="form-control" disabled/>
+            </div>
+            <div class="col-md-3">
+                <label for="destinationEndpoint" class="form-label"> Endpoint </label>
+                <select
+                        id="destinationEndpoint"
+                        name="destinationEndpoint"
+                        class="form-select"
+                >
+                    <option selected></option>
+                    <option value="oracle">ORACLE</option>
+                    <option value="mina">MINA</option>
+                    <option value="ecce">ECCE</option>
+                    <option value="internal">INTERNAL</option>
+                    <option value="email">EMAIL</option>
+                    <option value="rave">RAVE</option>
+                    <option value="cds">CDS</option>
+                    <option value="eccepp">ECCEPP</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex align-items-center gap-1 mb-4">
+            <button type="submit" class="btn btn-primary">Search Exchange</button>
+        </div>
+    </form>
+
+    <hr class="mb-4"/>
+    <div id="exchangeResult" style="display: none;">
+        <h4>Exchanges</h4>
+        <div class="row mb-4">
+            <div class="col-md-5">
+                <div
+                        class="d-flex flex-column gap-2 border border-1 rounded-top px-4 py-3"
+                >
+                    <div>
+                        Exchange 1 :
+                        <span id="exchange1Name" class="fw-bold text-uppercase"></span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <button type="button" id="" class="btn dis-btn">
+                            Source
+                        </button>
+                        <input
+                                type="text"
+                                id="ex1source"
+                                name="ex1source"
+                                class="form-control custom-input-field"
+                                placeholder="e.g. like from /outbound/"
+                        />
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                        <button type="button" id="" class="btn dis-btn">
+                            Destination
+                        </button>
+                        <input
+                                type="text"
+                                id="ex1des"
+                                name="ex1des"
+                                class="form-control custom-input-field"
+                                placeholder="e.g. like from /inbound/"
+                        />
+                    </div>
+
+                    <div
+                            class="form-check form-switch d-flex align-items-flex-end justify-content-end"
+                    >
+                        <input
+                                class="form-check-input"
+                                type="checkbox"
+                                role="switch"
+                                id=""
+                                checked
+                        />
+                    </div>
+                </div>
+                <div
+                        class="d-flex flex-column gap-2 border border-top-0 rounded-bottom p-3"
+                >
+                    <div>
+                        Exchange 2 :
+                        <span id="exchange2Name" class="fw-bold text-uppercase"></span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <button type="button" id="" class="btn dis-btn">
+                            Source
+                        </button>
+                        <input
+                                type="text"
+                                id="ex2source"
+                                name="ex2source"
+                                class="form-control custom-input-field"
+                                placeholder="e.g. like from /outbound/"
+                        />
+                    </div>
+
+                    <div class="d-flex align-items-center">
+                        <button type="button" id="" class="btn dis-btn">
+                            Destination
+                        </button>
+                        <input
+                                type="text"
+                                id="ex2des"
+                                name="ex2des"
+                                class="form-control custom-input-field"
+                                placeholder="e.g. like from /inbound/"
+                        />
+                    </div>
+                    <div
+                            class="form-check form-switch d-flex align-items-flex-end justify-content-end"
+                    >
+                        <input
+                                class="form-check-input"
+                                type="checkbox"
+                                role="switch"
+                                id="switchCheckChecked"
+                                checked
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4>Notify Users</h4>
+        <div class="row">
+            <div class="col-md-5">
+
+                <div id="notifyUsersContainer"
+                     class="border border-1 rounded p-3">
+
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-5" style="margin-bottom: 200px">
+                <div id="notifyEmailList" class="notify-email-list mb-3" aria-live="polite"></div>
+                <div class="d-flex align-items-center">
+                    <div style="width: 80%">
+                        <input
+                                type="email"
+                                id="notifyEmailInput"
+                                name="notifyEmailInput"
+                                class="form-control left-radius"
+                                placeholder="Search Email"
+                        />
+                    </div>
+                    <button type="button" id="addNotifyEmail" class="flex-grow-1 btn btn-outline-primary add-btn">+
+                        Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="responseModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="d-flex align-items-center justify-items-between">
+                <div class="modal-body" id="responseModalBody">
+                </div>
+                <div>
+                    <button type="button"
+                            class="btn-close me-3"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+<script th:src="@{/js/manageExchange.js}"></script>
+
+</body>
+</html>

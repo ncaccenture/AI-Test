@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('List Quartets')}"></head>
+
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Exchanges</h2>
+
+        <a th:href="@{/newExchange}" class="btn btn-primary">
+            Create Exchange
+        </a>
+    </div>
+
+    <div id="exchangeDataLoader" class="d-flex align-items-center justify-items-center justify-content-center mb-4">
+        <div class="d-flex align-items-center border border-2 p-2 rounded" style="width: 500px">
+            <strong role="status" class="text-primary fs-2">Ruk Ja Bhai...</strong>
+            <div class="spinner-border ms-auto text-primary" aria-hidden="true"
+                 style="width: 3rem; height: 3rem;"></div>
+        </div>
+    </div>
+
+    <div class="d-none table-responsive" id="exchangeDataTable">
+
+        <table class="table table-bordered align-middle">
+
+            <thead class="table-light">
+            <tr>
+                <th scope="col" style="width: 5%">#</th>
+                <th scope="col">
+                    Exchange
+                    <span style="margin-left: 130px;">Compound</span>
+                    <span style="margin-left: 80px;">Study</span>
+                    <span style="margin-left: 100px;">Department</span>
+                    <span style="margin-left: 70px;">Partner</span>
+                    <span style="margin-left: 100px;">Endpoint</span>
+                </th>
+                <th scope="col" style="width: 120px">Action</th>
+            </tr>
+            </thead>
+
+            <tbody id="exchangeTableBody">
+            <!-- Dynamic exchanges will be added here -->
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+<script th:src="@{/js/listExchanges.js}"></script>
+
+<script>
+
+
+</script>
+
+</body>
+</html>

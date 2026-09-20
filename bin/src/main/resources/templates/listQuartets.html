@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('List Quartets')}"></head>
+
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Quartets</h2>
+
+        <a th:href="@{/newQuartet}" class="btn btn-primary">
+            Create Quartet
+        </a>
+    </div>
+
+    <div id="quartetDataLoader" class="d-flex align-items-center justify-items-center justify-content-center mb-4">
+        <div class="d-flex align-items-center border border-2 p-2 rounded" style="width: 500px">
+            <strong role="status" class="text-primary fs-2">Ruk Ja Bhai...</strong>
+            <div class="spinner-border ms-auto text-primary" aria-hidden="true"
+                 style="width: 3rem; height: 3rem;"></div>
+        </div>
+    </div>
+
+    <div id="quartetDataTable" class="d-none table-responsive">
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>Business Unit</th>
+                <th>Category</th>
+                <th>Compound</th>
+                <th>Study</th>
+                <th>Department</th>
+                <th>Partner</th>
+            </tr>
+            </thead>
+
+            <tbody id="quartetTableBody">
+            <!-- Data will be loaded here -->
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- Message when no quartets exist -->
+    <div id="noQuartetsMessage"
+         class="alert alert-info text-center"
+         style="display: none;">
+        No quartets found.
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        fetchQuartets();
+
+    });
+
+
+    const quartetDataLoader = document.getElementById("quartetDataLoader");
+    const quartetDataTable = document.getElementById("quartetDataTable");
+
+    async function fetchQuartets() {
+
+        quartetDataLoader.classList.remove("d-none");
+        try {
+
+            const response = await fetch("/api/quartet/getAll");
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch quartets");
+            }
+
+            const result = await response.json();
+
+            const quartets = result.data;
+
+            const tableBody = document.getElementById("quartetTableBody");
+            const noQuartetsMessage =
+                document.getElementById("noQuartetsMessage");
+
+            tableBody.innerHTML = "";
+
+            if (!quartets || quartets.length === 0) {
+
+                noQuartetsMessage.style.display = "block";
+
+                return;
+            }
+
+            noQuartetsMessage.style.display = "none";
+
+            quartets.forEach(function (quartet, index) {
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${quartet.businessUnit}</td>
+                    <td>${quartet.category}</td>
+                    <td>${quartet.compound}</td>
+                    <td>${quartet.study}</td>
+                    <td>${quartet.department}</td>
+                    <td>${quartet.partner}</td>
+                `;
+
+                tableBody.appendChild(row);
+
+            });
+
+        } catch (error) {
+
+            console.error("Error fetching quartets:", error);
+
+            document.getElementById("quartetTableBody").innerHTML = `
+                <tr>
+                    <td colspan="7"
+                        class="text-center text-danger">
+                        Failed to load quartets.
+                    </td>
+                </tr>
+            `;
+        }finally {
+            quartetDataLoader.classList.add("d-none");
+            quartetDataTable.classList.remove("d-none");
+        }
+    }
+
+</script>
+
+</body>
+</html>

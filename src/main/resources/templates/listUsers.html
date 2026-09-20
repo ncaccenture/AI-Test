@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('List Quartets')}"></head>
+
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Quartets</h2>
+
+        <a th:href="@{/newUser}" class="btn btn-primary">
+            Create User
+        </a>
+    </div>
+
+    <div id="userDataLoader" class="d-flex align-items-center justify-items-center justify-content-center mb-4">
+        <div class="d-flex align-items-center border border-2 p-2 rounded" style="width: 500px">
+            <strong role="status" class="text-primary fs-2">Ruk Ja Bhai...</strong>
+            <div class="spinner-border ms-auto text-primary" aria-hidden="true"
+                 style="width: 3rem; height: 3rem;"></div>
+        </div>
+    </div>
+
+    <div class="table-responsive d-none" id="userDataTable">
+
+        <table class="table table-bordered table-hover align-middle">
+
+            <thead class="table-light">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Type</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+
+            <tbody id="userTableBody">
+            <!-- Data will be loaded here -->
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- Message when no users exist -->
+    <div id="noUsersMessage"
+         class="alert alert-info text-center"
+         style="display: none;">
+        No users found.
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchUsers();
+    });
+
+    const userDataLoader = document.getElementById("userDataLoader");
+    const userDataTable = document.getElementById("userDataTable");
+
+    async function fetchUsers() {
+
+        try {
+
+            const response = await fetch("/api/user/getAll");
+
+            if (!response.ok) {
+                throw new Error("Failed to fetch users");
+            }
+
+            const result = await response.json();
+
+            const users = result.data;
+
+
+            const tableBody = document.getElementById("userTableBody");
+            const noUsersMessage =
+                document.getElementById("noUsersMessage");
+
+            tableBody.innerHTML = "";
+
+            if (!users || users.length === 0) {
+
+                noUsersMessage.style.display = "block";
+
+                return;
+            }
+
+            noUsersMessage.style.display = "none";
+
+            users.forEach(function (user, index) {
+
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${user.firstName}</td>
+                    <td>${user.lastName}</td>
+                    <td>${user.email}</td>
+                    <td>${user.phoneNumber || "N/A"}</td>
+                    <td>${user.eisaiUser ? "Eisai User" : "External User"}</td>
+
+                    <td class="text-center">
+
+                        <button
+                            type="button"
+                            class="btn btn-outline-primary btn-sm px-3"
+                            onclick="viewUser('${user.id}')">
+                            View
+                        </button>
+
+        </td>
+                `;
+
+
+                window.userData = window.userData || {};
+                window.userData[user.id] = user;
+
+                tableBody.appendChild(row);
+
+            });
+
+        } catch (error) {
+
+            console.error("Error fetching users:", error);
+
+            document.getElementById("userTableBody").innerHTML = `
+                <tr>
+                    <td colspan="7"
+                        class="text-center text-danger">
+                        Failed to load Users.
+                    </td>
+                </tr>
+            `;
+        }finally {
+            userDataLoader.classList.add("d-none");
+            userDataTable.classList.remove("d-none");
+        }
+    }
+
+    function viewUser(userId) {
+
+        const user = window.userData[userId];
+
+        if (!user) {
+            console.error("User not found:", userId);
+            return;
+        }
+
+        window.location.href = `/manageUser?email=${user.email.toString()}`;
+    }
+
+</script>
+
+</body>
+</html>

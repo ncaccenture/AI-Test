@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('Manage User')}">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
+<div class="container px-4 mt-4">
+
+    <!-- Heading -->
+    <h1 class="mb-3">Manage User</h1>
+
+    <hr>
+
+
+    <!-- ================= SEARCH USER ================= -->
+
+    <h3 class="fst-italic mb-3">
+        Search User
+    </h3>
+
+    <div class="row align-items-end">
+
+        <div class="col-md-5">
+
+            <input type="email"
+                   id="searchEmail"
+                   class="form-control"
+                   placeholder="Enter user email">
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button type="button"
+                    id="searchUserButton"
+                    class="btn btn-outline-primary">
+                Search &gt;
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Error message -->
+    <div id="searchError"
+         class="alert alert-danger mt-3"
+         style="display: none;">
+    </div>
+
+
+    <!-- ================= USER DETAILS ================= -->
+
+    <div id="userDetails"
+         style="display: none;">
+
+        <ul class="nav nav-tabs mt-4">
+
+            <li class="nav-item">
+                <button class="nav-link active"
+                        data-bs-toggle="tab"
+                        data-bs-target="#demographics">
+                    User Demographics
+                </button>
+            </li>
+
+            <li class="nav-item" style="display: none;" id="sftpTab">
+                <button class="nav-link"
+                        data-bs-toggle="tab"
+                        data-bs-target="#sftpDetails">
+                    SFTP Details
+                </button>
+            </li>
+
+        </ul>
+
+
+        <div class="tab-content">
+
+            <!-- ================= DEMOGRAPHICS ================= -->
+
+            <div class="tab-pane fade show active" id="demographics">
+
+                <div class="col-md-5 mt-4">
+
+                    <!-- Name -->
+                    <div class="mt-3">
+                        <label class="form-label">
+                            Name
+                        </label>
+
+                        <div class="d-flex w-100">
+
+                            <div class="flex-grow-1">
+                                <input type="text"
+                                       id="firstName"
+                                       class="form-control first-name-field"
+                                       readonly>
+                            </div>
+
+                            <div class="flex-grow-1">
+                                <input type="text"
+                                       id="lastName"
+                                       class="form-control last-name-field"
+                                       readonly>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mt-3">
+
+                        <label class="form-label">
+                            Email
+                        </label>
+
+                        <input type="email"
+                               id="email"
+                               class="form-control">
+
+                    </div>
+
+
+                    <!-- Phone -->
+                    <div class="mt-3">
+
+                        <label class="form-label">
+                            Phone
+                        </label>
+
+                        <input type="text"
+                               id="phone"
+                               class="form-control light-bg-grey"
+                               readonly>
+
+                    </div>
+
+
+                    <!-- Type -->
+                    <div class="mt-3">
+
+                        <label class="form-label">
+                            Type of user
+                        </label>
+
+                        <input type="text"
+                               id="userType"
+                               class="form-control light-bg-grey"
+                               readonly>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= SFTP DETAILS ================= -->
+
+            <div class="tab-pane fade"
+                 id="sftpDetails">
+
+                <div class="col-md-7 mt-4">
+
+                    <!-- Name -->
+                    <div class="mt-3">
+                        <label class="form-label">
+                            Username
+                        </label>
+
+                        <div class="d-flex w-100">
+
+                            <div class="flex-grow-1">
+                                <input type="text"
+                                       id="userName"
+                                       class="form-control first-name-field"
+                                       readonly>
+                            </div>
+
+                            <div class="flex-grow-1 gap-0 d-flex">
+                                <button type="button"
+                                        id="passwordResetButton"
+                                        class="btn btn-outline-primary password-reset-button">
+                                    Password Reset
+                                </button>
+                                <button type="button"
+                                        id="resendCred"
+                                        class="btn btn-outline-primary resend-user-guide-button">
+                                    Resend User Guide
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ================= AUTHORIZED QUARTETS ================= -->
+                <hr>
+                <div class="col-md-7 mt-4">
+
+                    <h4>
+                        Authorized Quartets
+                    </h4>
+
+
+                    <div id="authorizedQuartets"
+                         class="md-col-5 border rounded">
+
+                        <!-- Quartets will be loaded here -->
+                    </div>
+
+                </div>
+
+                <div class="mt-3">
+
+                    <h4>
+                        New Access
+                    </h4>
+
+
+                    <div class="row">
+                        <!-- Compound -->
+                        <div class="col-md-2">
+                            <label for="compound" class="form-label"> Compound </label>
+
+                            <input type="text" id="compound" class="form-control"/>
+                        </div>
+
+                        <!-- Study -->
+                        <div class="col-md-2">
+                            <label for="study" class="form-label"> Study </label>
+
+                            <input type="text" id="study" class="form-control"/>
+                        </div>
+
+                        <!-- Department -->
+                        <div class="col-md-2">
+                            <label for="department" class="form-label"> Department </label>
+
+                            <select id="department" class="form-select">
+                                <option selected></option>
+                                <option value="dataops">Dataops</option>
+                                <option value="biostas">Biostats</option>
+                            </select>
+                        </div>
+
+                        <!-- Partner -->
+                        <div class="col-md-2">
+                            <label for="partner" class="form-label"> Partner </label>
+
+                            <input type="text" id="partner" class="form-control"/>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="button"
+                                    id="grantAccessButton"
+                                    class="btn btn-success "
+                            style="margin-top: 30px"
+                            >
+                                Grant Access
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade"
+     id="responseModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="d-flex align-items-center justify-items-between">
+                <div class="modal-body" id="responseModalBody">
+                </div>
+                <div>
+                    <button type="button"
+                            class="btn-close me-3"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+
+
+<script>
+
+    let currentUserId = null;
+
+
+    // ================= SEARCH USER =================
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const params = new URLSearchParams(window.location.search);
+        const searchEmail = document.getElementById("searchEmail");
+        searchEmail.value = params.get("email") || "";
+    });
+
+    document.getElementById("searchUserButton").addEventListener("click", searchUser);
+
+
+    async function searchUser() {
+
+        const email =
+            document.getElementById("searchEmail").value.trim();
+
+        const errorMessage =
+            document.getElementById("searchError");
+
+        const userDetails =
+            document.getElementById("userDetails");
+        const sftpTab =
+            document.getElementById("sftpTab");
+
+
+        errorMessage.style.display = "none";
+        userDetails.style.display = "none";
+        sftpTab.style.display = "none";
+
+
+        if (!email) {
+
+            errorMessage.textContent =
+                "Please enter an email address.";
+
+            errorMessage.style.display = "block";
+
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `/api/user/search?email=${encodeURIComponent(email)}`
+            );
+
+            if (!response.ok) {
+                throw new Error("User not found");
+            }
+
+            const result = await response.json();
+            const user = result.data;
+            console.log(user)
+
+            // Store user ID
+            currentUserId = user.id;
+
+
+            // ================= USER DETAILS =================
+
+            document.getElementById("firstName").value =
+                user.firstName || "";
+
+            document.getElementById("lastName").value =
+                user.lastName || "";
+
+            document.getElementById("email").value =
+                user.email || "";
+
+            document.getElementById("phone").value =
+                user.phone || "";
+
+
+            // User type
+            let userType = "";
+
+            if (user.eisaiUser) {
+                userType = "Eisai User";
+            } else {
+                userType = "External User";
+                sftpTab.style.display = "block";
+            }
+
+            document.getElementById("userType").value =
+                userType;
+
+            // SFTP username
+            document.getElementById("userName").value =
+                user.firstName.charAt(0).toLowerCase() + user.lastName.toLowerCase();
+
+            // Show details
+            userDetails.style.display = "block";
+
+            // Load authorized quartets
+            await loadAuthorizedQuartets();
+        } catch (error) {
+
+            console.error(error);
+
+            errorMessage.textContent =
+                "User not found.";
+
+            errorMessage.style.display = "block";
+
+        }
+
+    }
+
+
+    // ================= AUTHORIZED QUARTETS =================
+
+    async function loadAuthorizedQuartets() {
+
+        const container =
+            document.getElementById("authorizedQuartets");
+
+        container.innerHTML = "";
+
+
+        try {
+
+            const response = await fetch(
+                `/api/user/${currentUserId}/quartets`
+            );
+
+
+            if (!response.ok) {
+                throw new Error("Failed to load quartets");
+            }
+
+
+            const result = await response.json();
+
+            const quartets = result.data;
+
+
+            if (!quartets || quartets.length === 0) {
+
+                container.innerHTML = `
+                    <div class="p-3 text-muted">
+                        No quartets authorized.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            quartets.forEach(function (quartet) {
+
+                const row =
+                    document.createElement("div");
+
+                row.className =
+                    "d-flex justify-content-between align-items-center p-3";
+
+                row.innerHTML = `
+
+                    <span>
+                        ${quartet.compound}
+                        |
+                        ${quartet.study}
+                        |
+                        ${quartet.department}
+                        |
+                        ${quartet.partner}
+                    </span>
+
+                    <button type="button"
+                            class="btn btn-outline-danger btn-sm"
+                            onclick="revokeAccess(${quartet.id})">
+                        Revoke Access
+                    </button>
+
+                `;
+
+
+                container.appendChild(row);
+
+            });
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            container.innerHTML = `
+                <div class="p-3 text-danger">
+                    Failed to load authorized quartets.
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    // ================= GRANT ACCESS =================
+
+    document.getElementById("grantAccessButton")
+        .addEventListener("click", async function () {
+
+            const quartetData = {
+                compound: document.getElementById("compound").value,
+                study: document.getElementById("study").value,
+                department: document.getElementById("department").value,
+                partner: document.getElementById("partner").value
+            };
+
+            try {
+
+                const response = await fetch(
+                    `/api/user/${currentUserId}/authorizeQuartet`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(quartetData)
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Failed to grant access");
+                }
+
+
+                const result = await response.json();
+
+                document.getElementById("responseModalBody").textContent = result.message;
+                // Refresh authorized quartets
+                await loadAuthorizedQuartets();
+
+            } catch (error) {
+
+                console.error(error);
+                document.getElementById("responseModalBody").textContent = error.message;
+                alert("Failed to grant access.");
+
+            }
+            const modal = new bootstrap.Modal(
+                document.getElementById("responseModal")
+            );
+            modal.show();
+
+        });
+
+
+    // ================= REVOKE ACCESS =================
+
+    async function revokeAccess(quartetId) {
+
+        if (!confirm("Are you sure you want to revoke access?")) {
+            return;
+        }
+
+
+        try {
+
+            const response = await fetch(
+                `/api/user/${currentUserId}/quartets/${quartetId}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+            if (!response.ok) {
+
+                throw new Error("Failed to revoke access");
+
+            }
+
+
+            const result =
+                await response.json();
+
+
+            alert(result.message);
+
+
+            await loadAuthorizedQuartets();
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            alert("Failed to revoke access.");
+
+        }
+
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+<div th:fragment="executionPlan">
+
+    <div id="executionPlanLoader" class="d-none d-flex align-items-center justify-items-center justify-content-center">
+        <div class="d-flex align-items-center border border-2 p-2 rounded" style="width: 500px">
+            <strong role="status" class="text-primary fs-2">Creating Execution Plan...</strong>
+            <div class="spinner-border ms-auto text-primary" aria-hidden="true"
+                 style="width: 3rem; height: 3rem;"></div>
+        </div>
+    </div>
+
+    <div id="whole-container" class="d-none container border border-box rounded p-3">
+
+        <div>
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="mb-1">Automation Analysis</h1>
+                    <p class="text-muted mb-0">
+                        Review the actions before executing them.
+                    </p>
+                </div>
+
+                <button type="button" id="executeBtn" class="btn btn-success px-4">
+                    APPROVE & EXECUTE
+                </button>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div id="summarySection" class="mb-4 d-none border border-box rounded">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Analysis Summary
+                    </h5>
+
+                    <p id="summaryText"
+                       class="mb-0 text-muted">
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Quartet -->
+        <div id="quartetSection" class="mb-4 d-none">
+
+            <h4 class="mb-3">Quartet</h4>
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <label class="form-label text-muted">Business Unit</label>
+                            <div id="quartetBusinessUnit" class="fw-semibold"></div>
+                        </div>
+                        <div>
+                            <label class="form-label text-muted">Compound</label>
+                            <div id="quartetCompound" class="fw-semibold"></div>
+                        </div>
+                        <div>
+                            <label class="form-label text-muted">Study</label>
+                            <div id="quartetStudy" class="fw-semibold"></div>
+                        </div>
+                        <div>
+                            <label class="form-label text-muted">Department</label>
+                            <div id="quartetDepartment" class="fw-semibold"></div>
+                        </div>
+                        <div>
+                            <label class="form-label text-muted">Partner</label>
+                            <div id="quartetPartner" class="fw-semibold"></div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="text-muted">Database Status:</span>
+                        <span id="quartetStatus" class="badge"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users -->
+        <div id="usersSection" class="mb-4 d-none">
+
+            <h4 class="mb-3">Users</h4>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered align-middle">
+
+                    <thead class="table-light">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Database Status</th>
+                        <th>Action</th>
+                        <th>Notification</th>
+                        <th>SFTP Credentials</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody id="usersTableBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <!-- Exchange -->
+        <div id="exchangeSection" class="mb-4 d-none">
+
+            <h4 class="mb-3">Exchange</h4>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row g-3">
+
+                        <div class="d-flex gap-2">
+                            <label class="form-label text-muted"> Partner Type : </label>
+
+                            <div id="partnerType" class="fw-semibold"></div>
+                        </div>
+                        <hr/>
+
+                        <div class="col-md-6">
+                            <div class="d-flex gap-2">
+                                <label class="form-label text-muted">
+                                    Source Exchange Type :
+                                </label>
+                                <div id="sourceExchangeType" class="fw-semibold"></div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <label class="form-label text-muted">
+                                    Source Exchange Endpoint :
+                                </label>
+                                <div id="sourceExchangeEndpoint" class="fw-semibold"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="d-flex gap-2">
+                                <label class="form-label text-muted">
+                                    Destination Exchange Type :
+                                </label>
+                                <div id="destinationExchangeType" class="fw-semibold">
+                                    ECCE (default)
+                                </div>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <label class="form-label text-muted">
+                                    Destination Exchange Endpoint :
+                                </label>
+                                <div id="destinationExchangeEndpoint" class="fw-semibold">
+                                    ECCE (default)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex align-items-center gap-3">
+                    <span class="text-muted">
+                        Database Status:
+                    </span>
+                        <span id="exchangeStatus" class="badge">
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Execution Steps -->
+        <div id="stepsSection" class="mb-5 d-none">
+
+            <h4 class="mb-3">
+                Execution Plan
+            </h4>
+
+
+            <div id="stepsContainer">
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Result Modal -->
+    <div class="modal fade"
+         id="executionResponseModal"
+         tabindex="-1"
+         aria-hidden="true">
+
+        <div class="modal-dialog modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title">
+                        Automation
+                    </h5>
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal">
+                    </button>
+
+                </div>
+
+                <div class="modal-body"
+                     id="executionPlanResponseModalBody">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

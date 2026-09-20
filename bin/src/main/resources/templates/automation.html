@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('Automation')}">
+</head>
+
+<body>
+
+<!-- Reusable Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+
+<div class="mt-4" style="padding : 0 120px 0 120px">
+
+    <!-- Heading -->
+    <h1 class="mb-3">Automation</h1>
+
+    <hr>
+
+    <!-- Upload Section -->
+    <div class="row">
+
+        <div class="col-md-5">
+
+            <div class="card">
+
+                <div class="card-body">
+
+                    <h5 class="card-title mb-3">
+                        Upload Study / Partner Form
+                    </h5>
+
+                    <p class="text-muted">
+                        Upload a PDF or image of the form to process it.
+                    </p>
+
+
+                    <!-- File Upload -->
+                    <div class="mb-3">
+
+                        <label for="formFile" class="form-label">
+                            Select Form
+                        </label>
+
+                        <input
+                                class="form-control"
+                                type="file"
+                                id="formFile"
+                                accept=".pdf,.png,.jpg,.jpeg"
+                        >
+
+                        <div class="form-text">
+                            Supported formats: PDF, PNG, JPG, JPEG
+                        </div>
+
+                    </div>
+
+
+                    <!-- Selected File -->
+                    <div id="selectedFile"
+                         class="alert alert-secondary d-none">
+
+                        <strong>Selected File:</strong>
+
+                        <span id="fileName"></span>
+
+                    </div>
+
+
+                    <!-- Image Preview -->
+                    <div id="imagePreviewContainer"
+                         class="d-none mb-3">
+
+                        <p class="fw-semibold">
+                            Preview
+                        </p>
+
+                        <img
+                                id="imagePreview"
+                                src=""
+                                alt="Form Preview"
+                                class="img-fluid border rounded"
+                                style="max-height: 500px;"
+                        >
+
+                    </div>
+
+
+                    <!-- PDF Info -->
+                    <div id="pdfInfo"
+                         class="alert alert-info d-none">
+
+                        PDF selected. The form will be processed after
+                        clicking <strong>Process Form</strong>.
+
+                    </div>
+
+
+                    <!-- Process Button -->
+                    <button
+                            type="button"
+                            id="processFormBtn"
+                            class="btn btn-primary"
+                            disabled
+                    >
+
+                        Process Form
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div id="executionSection" class="mt-4 d-none">
+                <h4 class="mb-3">Execution Progress</h4>
+                <div class="card">
+                    <div class="card-body">
+                        <div id="executionSteps">
+                            <!-- Steps inserted by JS -->
+                        </div>
+                        <div id="executionMessage"
+                             class="alert mt-3 d-none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-7">
+            <div th:replace="~{fragments/executionPlan :: executionPlan}"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- Response Modal -->
+<div class="modal fade" id="responseModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Automation</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"> </button>
+            </div>
+
+            <div class="modal-body" id="responseModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="proceedBtn" type="button" class="btn btn-primary" data-bs-dismiss="modal">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Automation</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"> </button>
+            </div>
+
+            <div class="modal-body" id="errorModalBody">
+            </div>
+            <div class="modal-footer">
+                <button id="tryAgainBtn" type="button" class="btn btn-danger" data-bs-dismiss="modal">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+<script th:src="@{/js/automation.js}"></script>
+<script th:src="@{/js/executionPlan.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('Quartet')}"></head>
+
+<body>
+
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+    <!-- Heading -->
+    <h1 class="mb-3">Quartet Setup</h1>
+
+    <hr/>
+
+    <!-- Form -->
+    <form id="quartetForm">
+        <!-- First Row -->
+        <div class="row mb-4">
+            <!-- Business Unit -->
+            <div class="col-md-3">
+                <label for="businessUnit" class="form-label"> Business Unit </label>
+
+                <select id="businessUnit" class="form-select">
+                    <option selected></option>
+                    <option value="NBG">NBG</option>
+                    <option value="OBG">OBG</option>
+                </select>
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-3">
+                <label for="category" class="form-label"> Category </label>
+
+                <select id="category" class="form-select">
+                    <option selected>Clinical</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="row mb-4">
+            <!-- Compound -->
+            <div class="col-md-3">
+                <label for="compound" class="form-label"> Compound </label>
+
+                <input type="text" id="compound" class="form-control"/>
+            </div>
+
+            <!-- Study -->
+            <div class="col-md-3">
+                <label for="study" class="form-label"> Study </label>
+
+                <input type="text" id="study" class="form-control"/>
+            </div>
+
+            <!-- Department -->
+            <div class="col-md-3">
+                <label for="department" class="form-label"> Department </label>
+
+                <select id="department" class="form-select">
+                    <option selected></option>
+                    <option value="dataops">Dataops</option>
+                    <option value="biostas">Biostats</option>
+                </select>
+            </div>
+
+            <!-- Partner -->
+            <div class="col-md-3">
+                <label for="partner" class="form-label"> Partner </label>
+
+                <input type="text" id="partner" class="form-control"/>
+            </div>
+        </div>
+
+        <hr/>
+
+        <!-- Buttons -->
+        <div class="d-flex align-items-center gap-1">
+            <button type="submit" class="btn btn-success">CREATE</button>
+
+            <a href="/add-users" class="text-primary text-decoration-none">
+                Next: Add Users
+            </a>
+        </div>
+    </form>
+</div>
+
+<div class="modal fade"
+     id="responseModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="d-flex align-items-center justify-items-between">
+                <div class="modal-body" id="responseModalBody">
+                </div>
+                <div>
+                    <button type="button"
+                            class="btn-close me-3"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+<script th:src="@{/js/quartet.js}"></script>
+
+</body>
+</html>

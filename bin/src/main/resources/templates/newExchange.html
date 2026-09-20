@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: header('New Exchange')}">
+</head>
+
+<body>
+
+<!-- Navbar -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="container mt-4">
+    <div class="">
+        <h1 class="mb-3">Exchange Setup</h1>
+        <hr/>
+
+        <!-- Form -->
+        <form id="exchangeForm">
+            <!-- First Row -->
+            <div class="row mb-4 mx-3">
+                <!-- Business Unit -->
+                <h4 class="font-bold">Source Exchange</h4>
+                <div class="col-md-3">
+                    <label for="sourceExchangeType" class="form-label">
+                        Exchange Type
+                    </label>
+                    <select id="sourceExchangeType" name="sourceExchangeType" class="form-select">
+                        <option selected></option>
+                        <option value="ecce">ECCE</option>
+                        <option value="mina">Mina</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Category -->
+                <div class="col-md-3">
+                    <label for="sourceTrigger" class="form-label"> Trigger </label>
+                    <select id="sourceTrigger" name="sourceTrigger" class="form-select" disabled>
+                        <option selected></option>
+                        <option value="even">Event</option>
+                        <option value="poll">Poll</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="sourcePollingFrequency" class="form-label">
+                        Polling Frequency
+                    </label>
+                    <select id="sourcePollingFrequency" name="sourcePollingFrequency" class="form-select" disabled>
+                        <option selected></option>
+                        <option value="5">Every 5 minutes</option>
+                        <option value="10">Every 10 minutes</option>
+                        <option value="15">Every 15 minutes</option>
+                    </select>
+                </div>
+            </div>
+            <div class="custom-check form-check mb-2">
+                <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="enableexchange1"
+                        name="enableexchange1"
+                        checked
+                />
+
+                <label for="enableexchange1" class="form-check-label">
+                    Enable Exchange l</label
+                >
+            </div>
+            <div class="row mb-4 mx-3">
+                <div class="col-md-3">
+                    <label for="sourceExchangeNameSuffix" class="form-label">
+                        Exchange Name Suffix (optional)</label
+                    >
+                    <input type="text" id="sourceExchangeNameSuffix" name="sourceExchangeNameSuffix"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row mb-4 mx-3">
+                <!-- Business Unit -->
+                <h4 class="font-bold">Endpoint 1</h4>
+                <div class="col-md-3">
+                    <label for="sourceEndpoint" class="form-label"> Endpoint </label>
+                    <select id="sourceEndpoint" name="sourceEndpoint" class="form-select">
+                        <option selected></option>
+                        <option value="oracle">ORACLE</option>
+                        <option value="mina">MINA</option>
+                        <option value="ecce">ECCE</option>
+                        <option value="internal">INTERNAL</option>
+                        <option value="email">EMAIL</option>
+                        <option value="rave">RAVE</option>
+                        <option value="cds">CDS</option>
+                        <option value="eccepp">ECCEPP</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="sourceInboundPath" class="form-label">
+                        Explicit Path - INBOUND (optional)
+                    </label>
+                    <input type="text" id="sourceInboundPath" name="sourceInboundPath" class="form-control" disabled/>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="sourceOutboundPath" class="form-label">
+                        Explicit Path - OUTBOUND (optional)
+                    </label>
+                    <input type="text" id="sourceOutboundPath" name="sourceOutboundPath" class="form-control" disabled/>
+                </div>
+            </div>
+            <div class="row mb-4 mx-3">
+                <!-- Business Unit -->
+                <div class="col-md-3">
+                    <label for="sourceFileNameSuffix" class="form-label">
+                        File Name Suffix (optional)</label
+                    >
+                    <input type="text" id="sourceFileNameSuffix" name="sourceFileNameSuffix" class="form-control"/>
+                </div>
+            </div>
+            <div class="custom-check form-check mb-4">
+                <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="extractzipep2"
+                        name="extractzipep2"
+                />
+
+                <label for="extractzipep2" class="form-check-label">
+                    Extract Zip Package (optional)</label
+                >
+            </div>
+
+            <!-- Second Row -->
+            <hr/>
+
+            <div class="row mb-4 mx-3">
+                <!-- Compound -->
+                <h4>Source Quartet</h4>
+                <div class="col-md-3">
+                    <label for="sourceCompound" class="form-label"> Compound </label>
+                    <input type="text" id="sourceCompound" name="sourceCompound" class="form-control"/>
+                </div>
+
+                <!-- Study -->
+                <div class="col-md-3">
+                    <label for="sourceStudy" class="form-label"> Study </label>
+                    <input type="text" id="sourceStudy" name="sourceStudy" class="form-control"/>
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-3">
+                    <label for="sourceDepartment" class="form-label"> Department </label>
+                    <select id="sourceDepartment" name="sourceDepartment" class="form-select">
+                        <option selected></option>
+                        <option value="dataops">Dataops</option>
+                        <option value="biostats">Biostats</option>
+                    </select>
+                </div>
+
+                <!-- Partner -->
+                <div class="col-md-3">
+                    <label for="sourcePartner" class="form-label"> Partner </label>
+                    <input type="text" id="sourcePartner" name="sourcePartner" class="form-control"/>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="custom-check form-check mb-2">
+                <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="bidirectional"
+                        name="bidirectional"
+                        checked
+                />
+
+                <label for="bidirectional" class="form-check-label">
+                    Bidirectional Setup</label
+                >
+            </div>
+            <div class="row mb-4 mx-3">
+                <h4 class="font-bold">Destination Exchange</h4>
+                <div class="col-md-3">
+                    <label for="destinationExchangeType" class="form-label">
+                        Exchange Type
+                    </label>
+                    <select id="destinationExchangeType" name="destinationExchangeType" class="form-select">
+                        <option selected value="">ECCE</option>
+                        <option value="ecce">ECCE</option>
+                        <option value="mina">Mina</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Category -->
+                <div class="col-md-3">
+                    <label for="destinationTrigger" class="form-label"> Trigger </label>
+                    <select id="destinationTrigger" name="destinationTrigger" class="form-select">
+                        <option selected>Event</option>
+                        <option value="even">Event</option>
+                        <option value="poll">Poll</option>
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="destinationPollingFrequency" class="form-label">
+                        Polling Frequency
+                    </label>
+                    <select id="destinationPollingFrequency" name="destinationPollingFrequency" class="form-select">
+                        <option value="5">Every 5 minutes</option>
+                        <option value="10">Every 10 minutes</option>
+                        <option selected value="15">Every 15 minutes</option>
+                    </select>
+                </div>
+            </div>
+            <div class="custom-check form-check mb-2">
+                <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="enableexchange2"
+                        name="enableexchange2"
+                        checked
+                />
+
+                <label for="enableexchange2" class="form-check-label">
+                    Enable Exchange ll</label
+                >
+            </div>
+
+            <hr/>
+
+            <div class="row mb-4 mx-3">
+                <!-- Business Unit -->
+                <h4 class="font-bold">Endpoint 2</h4>
+                <div class="col-md-3">
+                    <label for="destinationEndpoint" class="form-label"> Endpoint </label>
+                    <select id="destinationEndpoint" name="destinationEndpoint" class="form-select">
+                        <option value="oracle">ORACLE</option>
+                        <option value="mina">MINA</option>
+                        <option value="ecce" selected>ECCE</option>
+                        <option value="internal">INTERNAL</option>
+                        <option value="email">EMAIL</option>
+                        <option value="rave">RAVE</option>
+                        <option value="cds">CDS</option>
+                        <option value="eccepp">ECCEPP</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="destinationInboundPath" class="form-label">
+                        Explicit Path - INBOUND (optional)
+                    </label>
+                    <input type="text" id="destinationInboundPath" name="destinationInboundPath" class="form-control"
+                           disabled/>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="destinationOutboundPath" class="form-label">
+                        Explicit Path - OUTBOUND (optional)
+                    </label>
+                    <input type="text" id="destinationOutboundPath" name="destinationOutboundPath" class="form-control"
+                           disabled/>
+                </div>
+            </div>
+
+            <div class="row mb-4 mx-3">
+                <div class="col-md-3">
+                    <label for="destinationFileNameSuffix" class="form-label">
+                        File Name Suffix (optional)</label
+                    >
+                    <input type="text" id="destinationFileNameSuffix" name="destinationFileNameSuffix"
+                           class="form-control"/>
+                </div>
+            </div>
+
+            <div class="custom-check form-check mb-4">
+                <input
+                        class="form-check-input"
+                        type="checkbox"
+                        id="extractzipep1"
+                        name="extractzipep1"
+                />
+
+                <label for="extractzipep1" class="form-check-label">
+                    Extract Zip Package (optional)</label
+                >
+            </div>
+
+            <hr/>
+
+            <div class="row mb-4 mx-3">
+                <!-- Compound -->
+                <h4>Destination Quartet</h4>
+                <div class="col-md-3">
+                    <label for="destinationCompound" class="form-label"> Compound </label>
+                    <input type="text" id="destinationCompound" name="destinationCompound" class="form-control"
+                           disabled/>
+                </div>
+
+                <!-- Study -->
+                <div class="col-md-3">
+                    <label for="destinationStudy" class="form-label"> Study </label>
+                    <input type="text" id="destinationStudy" name="destinationStudy" class="form-control" disabled/>
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-3">
+                    <label for="destinationDepartment" class="form-label"> Department </label>
+                    <select id="destinationDepartment" name="destinationDepartment" class="form-select" disabled>
+                        <option selected></option>
+                        <option value="dataops">Dataops</option>
+                        <option value="biostats">Biostats</option>
+                    </select>
+                </div>
+
+                <!-- Partner -->
+                <div class="col-md-3">
+                    <label for="destinationPartner" class="form-label"> Partner </label>
+                    <input type="text" id="destinationPartner" name="destinationPartner" class="form-control" disabled/>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row mb-4 mx-3">
+                <!-- Compound -->
+                <h4>Notify Users</h4>
+                <div class="col-md-5">
+                    <div id="notifyEmailList" class="notify-email-list mb-3" aria-live="polite"></div>
+                    <div class="d-flex align-items-center">
+                        <div style="width: 80%">
+                            <input
+                                    type="email"
+                                    id="notifyEmailInput"
+                                    name="notifyEmailInput"
+                                    class="form-control left-radius"
+                                    placeholder="Search Email"
+                            />
+                        </div>
+                        <button type="button" id="addNotifyEmail" class="flex-grow-1 btn btn-outline-primary add-btn">+
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+            <!-- Buttons -->
+            <div class="d-flex align-items-center gap-1" style="margin-bottom: 100px">
+                <button type="submit" class="btn btn-success">
+                    Create Exchange(s)
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="responseModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="d-flex align-items-center justify-items-between">
+                <div class="modal-body" id="responseModalBody">
+                </div>
+                <div>
+                    <button type="button"
+                            class="btn-close me-3"
+                            data-bs-dismiss="modal">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="~{fragments/script :: script}"></th:block>
+<script th:src="@{/js/exchange.js}"></script>
+
+</body>
+</html>

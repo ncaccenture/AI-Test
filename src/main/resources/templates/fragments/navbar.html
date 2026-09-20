@@ -1,0 +1,46 @@
+<nav th:fragment="navbar" class="navbar navbar-expand-lg bg-dark border-bottom border-body">
+    <div class="container-fluid align-items-center">
+        <h4 class="text-white mb-0 me-2 fs-2" >नीरव</h4>
+        <div class="collapse navbar-collapse px-4" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link custom-nav-link" aria-current="page" th:href="@{/}">Home</a>
+                </li>
+                <li class="nav-item dropdown text-white">
+                    <a class="nav-link dropdown-toggle custom-nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Quartet
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/newQuartet}">Create</a></li>
+                        <li><a class="dropdown-item" href="#">Find</a></li>
+                        <li><a class="dropdown-item" href="#">Study Owner</a></li>
+                        <li><a class="dropdown-item" th:href="@{/listQuartets}">List Quartets</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle custom-nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Exchange
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/newExchange}">Create</a></li>
+                        <li><a class="dropdown-item" th:href="@{/manageExchange}">Manage</a></li>
+                        <li><a class="dropdown-item" th:href="@{/listExchanges}">List Exchanges</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle custom-nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Users
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/newUser}">Create</a></li>
+                        <li><a class="dropdown-item" th:href="@{/manageUser}">Update</a></li>
+                        <li><a class="dropdown-item" th:href="@{/listUsers}">List Users</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link custom-nav-link" aria-current="page" th:href="@{/automation}">Automate</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
