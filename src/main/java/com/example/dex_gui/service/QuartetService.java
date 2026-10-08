@@ -7,18 +7,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public class QuartetService {
 
     private final QuartetRepository quartetRepository;
+    private final FolderService folderService;
 
-    public QuartetService(QuartetRepository quartetRepository){
+    public QuartetService(QuartetRepository quartetRepository, FolderService folderService){
+
         this.quartetRepository = quartetRepository;
+        this.folderService = folderService;
     }
 
-    public Quartet createQuartet(Quartet quartet){
+    public Quartet createQuartet(Quartet quartet) throws IOException {
         boolean existingQuartet = searchQuartet(quartet);
 
         if(existingQuartet){
@@ -27,7 +31,16 @@ public class QuartetService {
                     "Quartet already exists."
             );
         }
-        return quartetRepository.save(quartet);
+
+        Quartet savedQuartet = quartetRepository.save(quartet);
+
+        folderService.createQuartetFolders(
+                quartet.getCompound(),
+                quartet.getStudy(),
+                quartet.getDepartment(),
+                quartet.getPartner()
+        );
+        return savedQuartet;
     }
 
     public boolean searchQuartet(Quartet quartet){

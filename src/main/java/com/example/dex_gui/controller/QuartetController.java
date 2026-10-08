@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class QuartetController {
     private QuartetService quartetService;
 
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse<Quartet>> createQuartet(@RequestBody Quartet quartet){
+    public ResponseEntity<ApiResponse<Quartet>> createQuartet(@RequestBody Quartet quartet) throws IOException {
         Quartet createdQuartet = quartetService.createQuartet(quartet);
         ApiResponse<Quartet> response = new ApiResponse<>(
                 "Quartet successfully created",

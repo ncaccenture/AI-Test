@@ -32,65 +32,68 @@ import com.example.dex_gui.repository.ExchangeRepository;
 import com.example.dex_gui.repository.QuartetRepository;
 import com.example.dex_gui.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openai.client.OpenAIClient;
+// import com.openai.client.OpenAIClient;
 
 import jakarta.transaction.Transactional;
 
 @Service
 public class AutomationService {
 
-    private final OpenAIClient openAIClient;
+    // private final OpenAIClient openAIClient;
     private final String hiveApiKey;
 
     private final QuartetRepository quartetRepository;
+    private final QuartetService quartetService;
     private final UserRepository userRepository;
     private final ExchangeRepository exchangeRepository;
 
-
     public AutomationService(
-            OpenAIClient openAIClient,
+            // OpenAIClient openAIClient,
             QuartetRepository quartetRepository,
             UserRepository userRepository,
-            ExchangeRepository exchangeRepository) {
+            ExchangeRepository exchangeRepository,
+            QuartetService quartetService
+    ) {
 
-        this.openAIClient = openAIClient;
+        // this.openAIClient = openAIClient;
         this.quartetRepository = quartetRepository;
         this.userRepository = userRepository;
         this.exchangeRepository = exchangeRepository;
         this.hiveApiKey = "gqt6Mi2hjV4+5MNBSJ6dgg==";
+        this.quartetService = quartetService;
     }
 
-    public AutomationFormData analyzeOpenAI(MultipartFile file) {
+    // public AutomationFormData analyzeOpenAI(MultipartFile file) {
 
-        try {
+    //     try {
 
-            System.out.println("File received: " + file.getOriginalFilename());
-            System.out.println("File size: " + file.getSize());
+    //         System.out.println("File received: " + file.getOriginalFilename());
+    //         System.out.println("File size: " + file.getSize());
 
-            ResponseCreateParams params =
-                    ResponseCreateParams.builder()
-                            .model(ChatModel.GPT_4O)
-                            .input("Respond with exactly: AI_CONNECTION_SUCCESS")
-                            .build();
+    //         ResponseCreateParams params =
+    //                 ResponseCreateParams.builder()
+    //                         .model(ChatModel.GPT_4O)
+    //                         .input("Respond with exactly: AI_CONNECTION_SUCCESS")
+    //                         .build();
 
-            var response = openAIClient.responses().create(params);
+    //         var response = openAIClient.responses().create(params);
 
-            System.out.println("========== AI RESPONSE ==========");
-            System.out.println(response);
-            System.out.println("=================================");
+    //         System.out.println("========== AI RESPONSE ==========");
+    //         System.out.println(response);
+    //         System.out.println("=================================");
 
-            return new AutomationFormData();
+    //         return new AutomationFormData();
 
-        } catch (Exception e) {
+    //     } catch (Exception e) {
 
-            e.printStackTrace();
+    //         e.printStackTrace();
 
-            throw new RuntimeException(
-                    "AI analysis failed: " + e.getMessage(),
-                    e
-            );
-        }
-    }
+    //         throw new RuntimeException(
+    //                 "AI analysis failed: " + e.getMessage(),
+    //                 e
+    //         );
+    //     }
+    // }
 
     public AutomationFormData analyze(MultipartFile file) {
 
@@ -557,7 +560,7 @@ public class AutomationService {
                 quartet.setStudy(plan.getQuartet().getStudy());
                 quartet.setDepartment(plan.getQuartet().getDepartment());
                 quartet.setPartner(plan.getQuartet().getPartner());
-                quartet = quartetRepository.save(quartet);
+                quartet = quartetService.createQuartet(quartet);
             }
 
 

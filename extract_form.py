@@ -75,16 +75,25 @@ def extract_form_data(text):
     # 3. Partner Type + Partner Action
     # ========================================================
 
+    # match = re.search(
+    #     r"Partner Type:\s*\*?\s*S\s*F\s*T\s*P\s*Partner Action:\s*(Add|No Change|Remove |Update)",
+    #     text,
+    #     re.IGNORECASE
+    # )
+
+    # if match:
+
+    #     data["partnerType"] = "SFTP"
+    #     data["partnerAction"] = match.group(1)
     match = re.search(
-        r"Partner Type:\s*\*?\s*S\s*F\s*T\s*P\s*Partner Action:\s*(Add|No Change|Remove)",
+        r"Partner Type:\s*<strong class=\"___1qwroh2 fl43uef f19n0e5\" data-lexical-text=\"true\">\*</strong>?\s*(SFTP|Internal|internal)\s*Partner Action:\s*(Add|No Change|Remove|Update)",
         text,
         re.IGNORECASE
     )
 
     if match:
-
-        data["partnerType"] = "SFTP"
-        data["partnerAction"] = match.group(1)
+        data["partnerType"] = match.group(1).upper()
+        data["partnerAction"] = match.group(2)
 
 
     # ========================================================
