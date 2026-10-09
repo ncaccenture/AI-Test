@@ -189,8 +189,21 @@ function displayAnalysis(data) {
 
         document.getElementById("partnerType").textContent = data.partnerType || "-";
 
-        document.getElementById("sourceExchangeType").textContent = data.partnerType === "SFTP" ? "Mina" : "Other";
-        document.getElementById("sourceExchangeEndpoint").textContent = data.partnerType === "SFTP" ? "Mina" : "Internal";
+        let partnerType = data.partnerType || "-";
+        let sourceExchangeType = "";
+        let sourceExchangeEndpoint = "";
+        if (partnerType === "SFTP") {
+            sourceExchangeType = "Mina";
+            sourceExchangeEndpoint = "Mina";
+        }else if (partnerType === "Internal") {
+            sourceExchangeType = "Other";
+            sourceExchangeEndpoint = "Internal";
+        }else if (partnerType === "RAVE") {
+            sourceExchangeType = "Other";
+            sourceExchangeEndpoint = "Rave";
+        }
+        document.getElementById("sourceExchangeType").textContent = sourceExchangeType;
+        document.getElementById("sourceExchangeEndpoint").textContent = sourceExchangeEndpoint;
 
         document.getElementById("destinationExchangeType").textContent = "ECCE (default)";
         document.getElementById("destinationExchangeEndpoint").textContent = "ECCE (default)";

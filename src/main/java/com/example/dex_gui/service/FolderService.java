@@ -9,7 +9,7 @@ import java.nio.file.Path;
 @Service
 public class FolderService {
 
-    private static final String ROOT_FOLDER = "C:\\DEX_USER_SHARE";
+    private static final String ROOT_FOLDER = "C:\\DEMO_DEX_USER_SHARE";
 
     public void createQuartetFolders(
             String compound,

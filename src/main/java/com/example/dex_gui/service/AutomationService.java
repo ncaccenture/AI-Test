@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.openai.models.ChatModel;
-import com.openai.models.responses.ResponseCreateParams;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,8 +28,8 @@ import com.example.dex_gui.entity.User;
 import com.example.dex_gui.repository.ExchangeRepository;
 import com.example.dex_gui.repository.QuartetRepository;
 import com.example.dex_gui.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-// import com.openai.client.OpenAIClient;
 
 import jakarta.transaction.Transactional;
 
@@ -472,7 +469,7 @@ public class AutomationService {
                 new ExecutionStep(
                         4,
                         "Grant Quartet Access",
-                        isSFTP ? "Quartet access will be granted to " + userExecutions.size() + " partner user(s)." : "Separate quartet access is not required for Internal partner type",
+                        isSFTP ? "Quartet access will be granted to " + userExecutions.size() + " partner user(s)." : "Separate quartet access is not required for RAVE/Internal partner type",
                         isSFTP ? "READY" : "NOT Required"
                 )
         );
@@ -602,6 +599,11 @@ public class AutomationService {
                     user.setFirstName(userExecution.getFirstName());
                     user.setLastName(userExecution.getLastName());
                     user.setEmail(userExecution.getEmail());
+
+                    boolean isEisaiUser = userExecution.getEmail() != null && userExecution.getEmail().toLowerCase().contains("@eisai");
+
+                    user.setEisaiUser(isEisaiUser);
+                    user.setSftpUser(!isEisaiUser);
                     user = userRepository.save(user);
                 }
 
@@ -644,12 +646,19 @@ public class AutomationService {
                 // Create Exchange
                 exchange = new Exchange();
 
+                String partnerType = plan.getPartnerType();
+
                 // Source details
                 exchange.setSourceExchangeType(isSFTP ? "mina" : "Other");
                 exchange.setSourceTrigger("Event");
                 exchange.setSourcePollingFrequency(15);
                 exchange.setSourceExchangeNameSuffix("");
-                exchange.setSourceEndpoint(isSFTP ? "mina" : "internal");
+                exchange.setSourceEndpoint(
+                    "SFTP".equalsIgnoreCase(partnerType) ? "mina" :
+                    "Internal".equalsIgnoreCase(partnerType) ? "internal" :
+                    "RAVE".equalsIgnoreCase(partnerType) ? "rave" : 
+                    "internal"
+                );
                 exchange.setSourceInboundPath("");
                 exchange.setSourceOutboundPath("");
                 exchange.setSourceFileNameSuffix("");

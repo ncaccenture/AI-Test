@@ -1,15 +1,16 @@
 package com.example.dex_gui.service;
 
-import com.example.dex_gui.dto.AutomationFormData;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.dex_gui.dto.AutomationFormData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class PythonPdfParserService {
@@ -42,8 +43,6 @@ public class PythonPdfParserService {
             String pythonCommand = "py";
 
             String pythonScript = new File("extract_form.py").getAbsolutePath();
-//            String pythonScript =
-//                    "C:\\Projects\\Python\\extract_form.py";
 
             // --------------------------------------------------
             // 3. Execute Python
@@ -93,8 +92,8 @@ public class PythonPdfParserService {
 
             System.out.println("Python exit code: " + exitCode);
 
-            System.out.println("Python output:");
-            System.out.println(output);
+            // System.out.println("Python output:");
+            // System.out.println(output);
 
 
             if (exitCode != 0) {
