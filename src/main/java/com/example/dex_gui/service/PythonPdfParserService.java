@@ -92,8 +92,8 @@ public class PythonPdfParserService {
 
             System.out.println("Python exit code: " + exitCode);
 
-            // System.out.println("Python output:");
-            // System.out.println(output);
+            System.out.println("Python output:");
+            System.out.println(output);
 
 
             if (exitCode != 0) {

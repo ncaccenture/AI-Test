@@ -12,6 +12,8 @@ public class AutomationFormData {
     private String partnerType;
     private String partnerCompanyName;
     private String partnerIpRange;
+    private String inboundPath;
+    private String outboundPath;
 
     private List<AutomationUser> users;
     private List<PartnerContact> partnerContacts;
@@ -94,6 +96,22 @@ public class AutomationFormData {
 
     public void setPartnerContacts(List<PartnerContact> partnerContacts) {
         this.partnerContacts = partnerContacts;
+    }
+
+    public void setInboundPath(String inboundPath) {
+        this.inboundPath = inboundPath;
+    }
+
+    public String getInboundPath() {
+        return inboundPath;
+    }
+
+    public void setOutboundPath(String outboundPath) {
+        this.outboundPath = outboundPath;
+    }
+
+    public String getOutboundPath() {
+        return outboundPath;
     }
 
 }

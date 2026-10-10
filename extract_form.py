@@ -11,11 +11,34 @@ PDF_PATH = "demoform1.pdf"
 # Extract page 1
 # ============================================================
 
+# def extract_page_text(pdf_path):
+
+#     with pdfplumber.open(pdf_path) as pdf:
+#         return pdf.pages[0].extract_text()
+    
 def extract_page_text(pdf_path):
-
     with pdfplumber.open(pdf_path) as pdf:
-        return pdf.pages[0].extract_text()
+        return "\n".join(
+            page.extract_text() or ""
+            for page in pdf.pages[:2]
+        )
 
+
+def clean_extracted_email(email):
+    email = email.strip()
+
+    if "@" not in email:
+        return email
+
+    local_part, domain = email.split("@", 1)
+
+    # Remove characters introduced by N/A column overlap
+    domain = domain.replace("/", "")
+    domain = domain.replace("N", "")
+    domain = domain.replace("A", "")
+    domain = re.sub(r"\d+", "", domain)
+
+    return f"{local_part}@{domain}"
 
 # ============================================================
 # Extract form data
@@ -33,7 +56,9 @@ def extract_form_data(text):
         "partnerCompanyName": "",
         "partnerIpRange": "",
         "users": [],
-        "partnerContacts": []
+        "partnerContacts": [],
+        "inboundPath": "",
+        "outboundPath": ""
     }
 
     # ========================================================
@@ -229,32 +254,16 @@ def extract_form_data(text):
             # ------------------------------------------------
 
             email_match = re.search(
-                r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",
+                r"[A-Za-z0-9._%+-]+@"
+                r"[A-Za-z0-9./_-]+",
                 row
             )
 
             if not email_match:
                 continue
 
-            email = email_match.group(0)
-
-            # ------------------------------------------------
-            # Clean email
-            #
-            # Handles:
-            #
-            # Vivian.kao@firmaclinical.comN/A
-            #
-            # -> Vivian.kao@firmaclinical.com
-            # ------------------------------------------------
-
-            email = re.sub(
-                r"(N/A)+$",
-                "",
-                email,
-                flags=re.IGNORECASE
-            )
-
+            raw_email = email_match.group(0)
+            email = clean_extracted_email(raw_email)
 
             # ------------------------------------------------
             # Name
@@ -269,20 +278,10 @@ def extract_form_data(text):
                 re.IGNORECASE
             )
 
-            if name_match:
-
-                full_name = name_match.group(2).strip()
-
-                name_parts = full_name.split()
-
-                first_name = name_parts[0] if len(name_parts) >= 1 else ""
-                last_name = " ".join(name_parts[1:]) if len(name_parts) >= 2 else ""
-
-            else:
-
-                first_name = ""
-                last_name = ""
-
+            full_name = row[action_match.end():email_match.start()].strip()
+            name_parts = full_name.split()
+            first_name = name_parts[0] if len(name_parts) >= 1 else ""
+            last_name = " ".join(name_parts[1:]) if len(name_parts) >= 2 else ""
 
             # ------------------------------------------------
             # Phone
@@ -351,6 +350,30 @@ def extract_form_data(text):
 
                 "sftpCredentials": sftp_credentials
             })
+            
+    # ========================================================
+    # 8. Inbound/Outbound Paths
+    # ========================================================
+    
+    match = re.search(
+        r"Vendor Folders\s*\(Oracle,\s*Medidata,etc\.\):\s*"
+        r"Inbound\s+Outbound\s+"
+        r"(.*?)\s+(.*?)"
+        r"(?=\s+N/A|\s*$)",
+        text,
+        re.DOTALL | re.IGNORECASE
+    )
+
+    if match:
+
+        inbound_path = re.sub(r"\s*\r?\n\s*", "", match.group(1)).strip()
+        outbound_path = re.sub(r"\s*\r?\n\s*", "", match.group(2)).strip()
+        
+        data["inboundPath"] = inbound_path
+        data["outboundPath"] = outbound_path
+
+        # print("Inbound Path:", inbound_path, file=sys.stderr)
+        # print("Outbound Path:", outbound_path, file=sys.stderr)
 
     return data
 

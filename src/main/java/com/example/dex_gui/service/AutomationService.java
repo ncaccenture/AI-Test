@@ -61,37 +61,27 @@ public class AutomationService {
     }
 
     // public AutomationFormData analyzeOpenAI(MultipartFile file) {
-
     //     try {
-
     //         System.out.println("File received: " + file.getOriginalFilename());
     //         System.out.println("File size: " + file.getSize());
-
     //         ResponseCreateParams params =
     //                 ResponseCreateParams.builder()
     //                         .model(ChatModel.GPT_4O)
     //                         .input("Respond with exactly: AI_CONNECTION_SUCCESS")
     //                         .build();
-
     //         var response = openAIClient.responses().create(params);
-
     //         System.out.println("========== AI RESPONSE ==========");
     //         System.out.println(response);
     //         System.out.println("=================================");
-
     //         return new AutomationFormData();
-
     //     } catch (Exception e) {
-
     //         e.printStackTrace();
-
     //         throw new RuntimeException(
     //                 "AI analysis failed: " + e.getMessage(),
     //                 e
     //         );
     //     }
     // }
-
     public AutomationFormData analyze(MultipartFile file) {
 
         try {
@@ -262,7 +252,7 @@ public class AutomationService {
             if (aiResponse.isEmpty()) {
                 throw new RuntimeException(
                         "Hive returned no AI content. HTTP status: "
-                                + response.statusCode()
+                        + response.statusCode()
                 );
             }
 
@@ -327,9 +317,8 @@ public class AutomationService {
         // =====================================================
         // 1. QUARTET CHECK
         // =====================================================
-
-        Optional<Quartet> quartetOptional =
-                quartetRepository
+        Optional<Quartet> quartetOptional
+                = quartetRepository
                         .findByCompoundAndStudyAndDepartmentAndPartner(
                                 formData.getCompound(),
                                 formData.getStudy(),
@@ -362,18 +351,16 @@ public class AutomationService {
 
         plan.setQuartet(quartet);
 
-
         // =====================================================
         // 2. USER CHECK
         // =====================================================
-
         List<UserExecution> userExecutions = new ArrayList<>();
 
         if (formData.getPartnerContacts() != null) {
             for (PartnerContact contact : formData.getPartnerContacts()) {
                 // Ignore empty contacts
-                if (contact.getEmail() == null ||
-                        contact.getEmail().isBlank()) {
+                if (contact.getEmail() == null
+                        || contact.getEmail().isBlank()) {
                     continue;
                 }
                 UserExecution user = new UserExecution();
@@ -383,11 +370,9 @@ public class AutomationService {
                 user.setNotification(contact.isNotification());
                 user.setSftpCredentials(contact.isSftpCredentials());
 
-
                 // ---------------------------------------------
                 // Search database
                 // ---------------------------------------------
-
                 Optional<User> existingUser = userRepository.findByEmail(contact.getEmail());
 
                 if (existingUser.isPresent()) {
@@ -411,19 +396,19 @@ public class AutomationService {
 
         plan.setUsers(userExecutions);
 
-
         // =====================================================
         // 3. EXCHANGE CHECK
         // =====================================================
-
         ExchangeExecution exchange = new ExchangeExecution();
         exchange.setWillCreate(true);
+        exchange.setDestinationFileNameSuffix("RDE-SASD");
+        exchange.setInboundPath(formData.getInboundPath());
+        exchange.setOutboundPath(formData.getOutboundPath());
         plan.setExchange(exchange);
 
         // =====================================================
         // 4. STEPS
         // =====================================================
-
         boolean isSFTP = Objects.equals(plan.getPartnerType(), "SFTP");
         List<ExecutionStep> steps = new ArrayList<>();
 
@@ -432,28 +417,26 @@ public class AutomationService {
                         1,
                         "Check Quartet",
                         quartet.isExists()
-                                ? "Quartet already exists. Existing quartet ID: "
-                                + quartet.getId()
-                                : "Quartet does not exist and will be created.",
+                        ? "Quartet already exists. Existing quartet ID: "
+                        + quartet.getId()
+                        : "Quartet does not exist and will be created.",
                         "READY"
                 )
         );
-
 
         steps.add(
                 new ExecutionStep(
                         2,
                         "Check Users",
                         userExecutions.size()
-                                + " partner user(s) checked. "
-                                + countExistingUsers(userExecutions)
-                                + " already exist and "
-                                + countNewUsers(userExecutions)
-                                + " will be created.",
+                        + " partner user(s) checked. "
+                        + countExistingUsers(userExecutions)
+                        + " already exist and "
+                        + countNewUsers(userExecutions)
+                        + " will be created.",
                         "READY"
                 )
         );
-
 
         steps.add(
                 new ExecutionStep(
@@ -464,7 +447,6 @@ public class AutomationService {
                 )
         );
 
-
         steps.add(
                 new ExecutionStep(
                         4,
@@ -474,13 +456,11 @@ public class AutomationService {
                 )
         );
 
-
         plan.setSteps(steps);
 
         // =====================================================
         // 5. SUMMARY
         // =====================================================
-
         plan.setSummary(
                 buildSummary(
                         quartet,
@@ -535,15 +515,14 @@ public class AutomationService {
             // =====================================================
             // STEP 1 - QUARTET
             // =====================================================
-
             boolean isSFTP = Objects.equals(plan.getPartnerType(), "SFTP");
             Quartet quartet;
 
             if (plan.getQuartet().isExists()) {
 
                 quartet = quartetRepository.findById(plan.getQuartet().getId())
-                        .orElseThrow(() ->
-                                new RuntimeException(
+                        .orElseThrow(()
+                                -> new RuntimeException(
                                         "Quartet not found"
                                 )
                         );
@@ -560,7 +539,6 @@ public class AutomationService {
                 quartet = quartetService.createQuartet(quartet);
             }
 
-
             // VERY IMPORTANT
             // Update the plan with the actual DB ID
             plan.getQuartet().setId(quartet.getId());
@@ -573,11 +551,9 @@ public class AutomationService {
                     "COMPLETED"
             ));
 
-
             // =====================================================
             // STEP 2 - USERS
             // =====================================================
-
             List<User> usersForAccess = new ArrayList<>();
 
             for (UserExecution userExecution : plan.getUsers()) {
@@ -587,8 +563,8 @@ public class AutomationService {
                 if (userExecution.isExists()) {
                     user = userRepository
                             .findByEmail(userExecution.getEmail())
-                            .orElseThrow(() ->
-                                    new RuntimeException(
+                            .orElseThrow(()
+                                    -> new RuntimeException(
                                             "User not found: " + userExecution.getEmail()
                                     )
                             );
@@ -608,7 +584,6 @@ public class AutomationService {
                 }
 
                 // Update execution information
-
                 userExecution.setUserId(user.getId());
 
                 userExecution.setExists(true);
@@ -617,7 +592,6 @@ public class AutomationService {
 
                 usersForAccess.add(user);
             }
-
 
             steps.add(
                     new ExecutionStep(
@@ -628,11 +602,9 @@ public class AutomationService {
                     )
             );
 
-
             // =====================================================
             // STEP 3 - CREATE EXCHANGE
             // =====================================================
-
             Exchange exchange;
 
             if (plan.getExchange().isExists()) {
@@ -654,13 +626,22 @@ public class AutomationService {
                 exchange.setSourcePollingFrequency(15);
                 exchange.setSourceExchangeNameSuffix("");
                 exchange.setSourceEndpoint(
-                    "SFTP".equalsIgnoreCase(partnerType) ? "mina" :
-                    "Internal".equalsIgnoreCase(partnerType) ? "internal" :
-                    "RAVE".equalsIgnoreCase(partnerType) ? "rave" : 
-                    "internal"
+                        "SFTP".equalsIgnoreCase(partnerType) ? "mina"
+                        : "Internal".equalsIgnoreCase(partnerType) ? "internal"
+                        : "RAVE".equalsIgnoreCase(partnerType) ? "rave"
+                        : "internal"
                 );
-                exchange.setSourceInboundPath("");
-                exchange.setSourceOutboundPath("");
+                exchange.setSourceInboundPath(
+                        plan.getExchange().getInboundPath() != null
+                        ? plan.getExchange().getInboundPath()
+                        : ""
+                );
+
+                exchange.setSourceOutboundPath(
+                        plan.getExchange().getOutboundPath() != null
+                        ? plan.getExchange().getOutboundPath()
+                        : ""
+                );
                 exchange.setSourceFileNameSuffix("");
                 exchange.setSourceEnabled(true);
                 exchange.setSourceExtractZip(false);
@@ -672,7 +653,11 @@ public class AutomationService {
                 exchange.setDestinationEndpoint("ecce");
                 exchange.setDestinationInboundPath("");
                 exchange.setDestinationOutboundPath("");
-                exchange.setDestinationFileNameSuffix("");
+                exchange.setDestinationFileNameSuffix(
+                    plan.getExchange().getDestinationFileNameSuffix() != null
+                        ? plan.getExchange().getDestinationFileNameSuffix()
+                        : ""
+                );
                 exchange.setDestinationEnabled(true);
                 exchange.setDestinationExtractZip(false);
 
@@ -703,12 +688,10 @@ public class AutomationService {
                     )
             );
 
-
             // =====================================================
             // STEP 4 - GRANT QUARTET ACCESS
             // =====================================================
-
-            if(isSFTP){
+            if (isSFTP) {
                 for (User user : usersForAccess) {
                     user.getQuartets().add(quartet);
                     userRepository.save(user);
@@ -719,8 +702,8 @@ public class AutomationService {
                                 4,
                                 "Grant Quartet Access",
                                 "Successfully granted quartet access to "
-                                        + usersForAccess.size()
-                                        + " user(s).",
+                                + usersForAccess.size()
+                                + " user(s).",
                                 "COMPLETED"
                         )
                 );
@@ -729,7 +712,6 @@ public class AutomationService {
             // =====================================================
             // SUCCESS
             // =====================================================
-
             result.setSuccess(true);
 
             result.setMessage("Automation executed successfully.");
